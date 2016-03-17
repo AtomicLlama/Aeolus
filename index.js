@@ -2,7 +2,6 @@ var http = require('http');
 var dispatcher = require('httpdispatcher');
 var auth = require('basic-auth');
 var fs = require('fs');
-var Method = require('./util/method.js');
 
 var Aeolus = function() {
   this.methodPath = "/methods";
@@ -35,7 +34,15 @@ Aeolus.prototype.www = function(path) {
 };
 
 Aeolus.prototype.Method = function() {
-  return Method;
+  return require('./util/method.js');
+};
+
+Aeolus.prototype.Response = function() {
+  return require('./util/response.js');
+};
+
+Aeolus.prototype.Request = function() {
+  return require('./util/request.js');
 };
 
 Aeolus.prototype.createServer = function(port,options) {
@@ -50,6 +57,7 @@ Aeolus.prototype.createServer = function(port,options) {
   var getWebFile = require('./util/getWebFile.js');
   var getMethods = require('./util/getMethods.js');
   var Response = require('./util/response.js');
+  var Request = require('./util/request.js');
   var methods = getMethods(this.methodPath);
 
   var unauth = this.unauthorisedHandler;
@@ -66,15 +74,24 @@ Aeolus.prototype.createServer = function(port,options) {
   var auther = this.authHandler;
 
   var creator = function(resource) {
-    return function(req,r) {
+    return function(re,r) {
         var res = new Response(r);
-        if (auther !== null && resource.needsAuth) {
+        var req = new Request(re,this);
+        if (resource.authHandler !== null || (auther !== null && resource.needsAuth)) {
           var authData = auth(req);
           if (authData) {
-            if (auther(authData.name,authData.pass)) {
-              resource.handler(req,res,authData.name,authData.pass);
-            } else {
-              unauthorised(req,res);
+            if (resource.authHandler !== null) {
+              if (resource.authHandler(authData.name,authData.pass)) {
+                resource.handler(req,res);
+              } else {
+                unauthorised(req,res);
+              }
+            } else {
+              if (auther(authData.name,authData.pass)) {
+                resource.handler(req,res);
+              } else {
+                unauthorised(req,res);
+              }
             }
           } else {
             unauthorised(req,res);
