@@ -1,6 +1,6 @@
 {
   "name": "aeolus",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "AtomicLlama's fast and problem free framework for fast NodeJS Servers.",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/AtomicLlama/Aeolus/issues"
+  },
+  "bin": {
+    "aeolus": "./bin/aeolus"
   },
   "homepage": "https://github.com/AtomicLlama/Aeolus#readme",
   "dependencies": {
