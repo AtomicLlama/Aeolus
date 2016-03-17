@@ -52,22 +52,26 @@ Aeolus.prototype.createServer = function(port,options) {
   var Response = require('./util/response.js');
   var methods = getMethods(this.methodPath);
 
+  var unauth = this.unauthorisedHandler;
+  var error = this.errorHandler;
+
   var unauthorised = function(req,res) {
-    if (this.unauthorisedHandler !== null) {
-      this.unauthorisedHandler(req,res);
+    if (unauth !== null) {
+      unauth(req,res);
     } else {
-      this.errorHandler(req,res);
+      res.promptPassword("Please enter a Password");
     }
   };
 
+  var auther = this.authHandler;
+
   var creator = function(resource) {
     return function(req,r) {
-        console.log("request here!");
         var res = new Response(r);
-        if (this.authHandler !== null && resource.needsAuth) {
+        if (auther !== null && resource.needsAuth) {
           var authData = auth(req);
           if (authData) {
-            if (this.authHandler(authData.name,authData.pass)) {
+            if (auther(authData.name,authData.pass)) {
               resource.handler(req,res,authData.name,authData.pass);
             } else {
               unauthorised(req,res);
@@ -86,7 +90,7 @@ Aeolus.prototype.createServer = function(port,options) {
     var resources = methods[i].resources;
     dispatcher.listeners[name] = [];
     for (var j = 0; j < resources.length; j++) {
-      var resource = resources[i];
+      var resource = resources[j];
       var handler = creator(resource);
       dispatcher.on(name,'/' + resource.name, handler);
     }
@@ -96,8 +100,10 @@ Aeolus.prototype.createServer = function(port,options) {
     dispatcher.dispatch(req,res);
   };
 
+  var publicPath = this.publicPath;
+
   http.createServer(function (request, response) {
-    getWebFile(request,response,dispatch,this.publicPath,this.errorHandler);
+    getWebFile(request, response, dispatch, publicPath, error);
   }).listen(port);
 
 };

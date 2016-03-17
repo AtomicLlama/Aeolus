@@ -16,7 +16,7 @@ Response.prototype.respondPlainText = function(text, status, headers) {
   this.res.end(text);
 };
 
-Response.prototype.promtPassword = function(text,headers) {
+Response.prototype.promptPassword = function(text,headers) {
   var h = headers || {};
   h["WWW-Authenticate"] = 'Basic realm="Server"';
   this.respondPlainText(text,401,h);

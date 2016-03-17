@@ -1,6 +1,6 @@
 {
   "name": "aeolus",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "AtomicLlama's fast and problem free framework for fast NodeJS Servers.",
   "main": "index.js",
   "scripts": {
