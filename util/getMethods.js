@@ -11,6 +11,7 @@ function resourcesForDir(dir,pathToMethods) {
   return items.map(function(file) {
     var filename = path.join(process.cwd(), pathToMethods + "/" + dir + "/" + file);
     var method = require(filename);
+    method.name = file.split(".")[0];
     return method;
   });
 }
@@ -21,10 +22,13 @@ function getMethods(pathToMethods) {
     var filename = path.join(process.cwd(), pathToMethods + "/" + file);
     return fs.statSync(filename).isDirectory();
   });
-  directories = directories.map(function(dir) {
+  return directories.map(function(dir) {
     return {
       name: dir,
-      resouces: resourcesForDir(dir,pathToMethods)
+      resources: resourcesForDir(dir,pathToMethods)
     };
   });
+
 }
+
+module.exports = getMethods;

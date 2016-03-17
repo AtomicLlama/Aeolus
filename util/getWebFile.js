@@ -2,8 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
-var getWebFile = function(request,response,callback,path,error) {
-  var uri = path + url.parse(request.url).pathname;
+var getWebFile = function(request,response,callback,publicPath,error) {
+  var uri = publicPath + url.parse(request.url).pathname;
   var filename = path.join(process.cwd(), uri);
   try {
     fs.exists(filename, function(exists) {

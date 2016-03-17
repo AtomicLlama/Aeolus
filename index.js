@@ -2,10 +2,11 @@ var http = require('http');
 var dispatcher = require('httpdispatcher');
 var auth = require('basic-auth');
 var fs = require('fs');
+var Method = require('./util/method.js');
 
 var Aeolus = function() {
-  this.methodPath = "../methods/";
-  this.publicPath = "../www/";
+  this.methodPath = "/methods";
+  this.publicPath = "/www";
   this.errorHandler = function(err) {
     throw err;
   };
@@ -33,6 +34,10 @@ Aeolus.prototype.www = function(path) {
   this.publicPath = path;
 };
 
+Aeolus.prototype.Method = function() {
+  return Method;
+};
+
 Aeolus.prototype.createServer = function(port,options) {
   if (options) {
     if (options.methods) this.methods(options.methods);
@@ -55,14 +60,15 @@ Aeolus.prototype.createServer = function(port,options) {
     }
   };
 
-  var creator = function(resouce) {
+  var creator = function(resource) {
     return function(req,r) {
+        console.log("request here!");
         var res = new Response(r);
-        if (this.authHandler !== null && resouce.needsAuth) {
+        if (this.authHandler !== null && resource.needsAuth) {
           var authData = auth(req);
           if (authData) {
             if (this.authHandler(authData.name,authData.pass)) {
-              resouce.handler(req,res,authData.name,authData.pass);
+              resource.handler(req,res,authData.name,authData.pass);
             } else {
               unauthorised(req,res);
             }
@@ -70,7 +76,7 @@ Aeolus.prototype.createServer = function(port,options) {
             unauthorised(req,res);
           }
       } else {
-        resouce.handler(req,res);
+        resource.handler(req,res);
       }
     };
   };
@@ -80,14 +86,18 @@ Aeolus.prototype.createServer = function(port,options) {
     var resources = methods[i].resources;
     dispatcher.listeners[name] = [];
     for (var j = 0; j < resources.length; j++) {
-      var resouce = resouces[i];
-      var handler = creator(resouce);
-      dispatcher.on(name,'/' + resouce.name, handler);
+      var resource = resources[i];
+      var handler = creator(resource);
+      dispatcher.on(name,'/' + resource.name, handler);
     }
   }
 
+  var dispatch = function(req,res) {
+    dispatcher.dispatch(req,res);
+  };
+
   http.createServer(function (request, response) {
-    getWebFile(request,response,dispatcher.dispatch,this.publicPath,error);
+    getWebFile(request,response,dispatch,this.publicPath,this.errorHandler);
   }).listen(port);
 
 };
