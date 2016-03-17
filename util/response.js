@@ -9,6 +9,19 @@ Response.prototype.respondJSON = function(object, status, headers) {
   this.res.end(JSON.stringify(object,0,4));
 };
 
+Response.prototype.respondFile = function (filename, status) {
+  fs.readFile(filename, "binary", function(err, file) {
+    var h = headers || {};
+    if(err) {
+      throw err;
+    } else {
+      response.writeHead(status);
+      response.write(file, "binary");
+      response.end();
+    }
+  });
+};
+
 Response.prototype.respondPlainText = function(text, status, headers) {
   var h = headers || {};
   h['Content-Type'] = 'text/plain';

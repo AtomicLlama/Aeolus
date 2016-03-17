@@ -12,11 +12,8 @@ function resourcesForDir(dir,pathToMethods) {
     var filename = path.join(process.cwd(), pathToMethods + "/" + dir + "/" + file);
     var method = require(filename);
     var name = file.split(".")[0];
-    return {
-      needsAuth: method.needsAuth,
-      handler: method.handler,
-      name: name
-    };
+    method.name = name;
+    return method;
   });
 }
 

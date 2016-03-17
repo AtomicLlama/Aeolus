@@ -2,8 +2,9 @@ var Method = function() {
   this.handler = function(req,res) {
     res.respondPlainText("This is a new Method!");
   };
+  this.name = "";
   this.needsAuth = false;
-  this.authHandler = null;
+  this.authHandler = false;
 };
 
 Method.prototype.handle = function (f) {

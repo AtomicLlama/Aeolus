@@ -33,17 +33,11 @@ Aeolus.prototype.www = function(path) {
   this.publicPath = path;
 };
 
-Aeolus.prototype.Method = function() {
-  return require('./util/method.js');
-};
+Aeolus.prototype.Method = require('./util/method.js');
 
-Aeolus.prototype.Response = function() {
-  return require('./util/response.js');
-};
+Aeolus.prototype.Response = require('./util/response.js');
 
-Aeolus.prototype.Request = function() {
-  return require('./util/request.js');
-};
+Aeolus.prototype.Request = require('./util/request.js');
 
 Aeolus.prototype.createServer = function(port,options) {
   if (options) {
@@ -77,10 +71,10 @@ Aeolus.prototype.createServer = function(port,options) {
     return function(re,r) {
         var res = new Response(r);
         var req = new Request(re,this);
-        if (resource.authHandler !== null || (auther !== null && resource.needsAuth)) {
+        if (resource.authHandler || (auther !== null && resource.needsAuth)) {
           var authData = auth(req);
           if (authData) {
-            if (resource.authHandler !== null) {
+            if (resource.authHandler) {
               if (resource.authHandler(authData.name,authData.pass)) {
                 resource.handler(req,res);
               } else {
