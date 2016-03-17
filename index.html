@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Aeolus by AtomicLlama</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Aeolus</h1>
+        <h2>The instant REST API by Atomic Llama</h2>
+        <a href="https://github.com/AtomicLlama/Aeolus" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p><img src="https://raw.githubusercontent.com/AtomicLlama/Aeolus/master/aeolusgit.png" alt="Aeolus" title="The instant REST API"></p>
+
+<p>Hello! This is Aeolus. The instant REST API by Atomic Llama.</p>
+
+<p>Aeolus allows you to create a fast, simple and extendible REST API in seconds.</p>
+
+<p>One of the key features of the framework is that it allows you to how a website and your REST API on the same server with the minimal amount of code.</p>
+
+<h2>
+<a id="installing-aeolus" class="anchor" href="#installing-aeolus" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing Aeolus</h2>
+
+<p>Aeolus works with node and you can use it to start from scratch or compliment your current project.</p>
+
+<h3>
+<a id="starting-from-scratch" class="anchor" href="#starting-from-scratch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starting From Scratch</h3>
+
+<p>To create a new project with Aeolus you will need <a href="http://nodejs.org">NodeJS</a> and <a href="http://npmjs.com">npm</a> installed.</p>
+
+<p>Once done with that. You can install Aeolus from the terminal.</p>
+
+<pre><code>$ npm install aeolus -g
+</code></pre>
+
+<p>To create your project you can navigate to the folder where you want it (or create one) and run our wizard with</p>
+
+<pre><code>$ aeolus
+</code></pre>
+
+<p>Simply follow the steps and you will have a whole project already in front of you!</p>
+
+<h3>
+<a id="add-aeolus-to-your-current-project" class="anchor" href="#add-aeolus-to-your-current-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add Aeolus to your current project</h3>
+
+<p>Perhaps you already know a bit about Node and don't need our wizard.</p>
+
+<p>Simply run:</p>
+
+<pre><code>$ npm install aeolus --save
+</code></pre>
+
+<p>And our Framework will be already installed for you to use.</p>
+
+<h2>
+<a id="staring-it" class="anchor" href="#staring-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Staring it</h2>
+
+<p>To use kickstart Aeolus you simply have to call the function createServer with the port number you want it to listen to.</p>
+
+<p>We recommend having this code:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> Aeolus <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>Aeolus<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">var</span> port <span class="pl-k">=</span> <span class="pl-c1">process</span>.<span class="pl-smi">env</span>.<span class="pl-c1">PORT</span> <span class="pl-k">||</span> <span class="pl-c1">8080</span>;
+
+<span class="pl-smi">Aeolus</span>.<span class="pl-en">createServer</span>(port);</pre></div>
+
+<h2>
+<a id="more-options" class="anchor" href="#more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More Options</h2>
+
+<h3>
+<a id="other-folders" class="anchor" href="#other-folders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other folders</h3>
+
+<p>Aeolus will by default listen to the "/methods" and "/www" folders for your API and public page. But you can give Aeolus another path to listen to instead with the functions .methods and .www. For Example:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-en">methods</span>(<span class="pl-s"><span class="pl-pds">"</span>/api<span class="pl-pds">"</span></span>);  <span class="pl-c">// API Methods are now in the /api folder</span>
+<span class="pl-smi">Aeolus</span>.<span class="pl-en">methods</span>(<span class="pl-s"><span class="pl-pds">"</span>/html<span class="pl-pds">"</span></span>); <span class="pl-c">// Web page is now in the /html folder</span></pre></div>
+
+<h3>
+<a id="authentification" class="anchor" href="#authentification" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentification</h3>
+
+<p>You can tell Aeolus how authentication works in your site by providing an authentication function.
+This function would take a username and a password and return if it's valid or not. So that all methods marked as needing Authentication will prompt the user for a password.</p>
+
+<p>You can enter this function by calling auth. For Example:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-smi">Aeolus</span>.<span class="pl-en">auth</span>(<span class="pl-k">function</span>(<span class="pl-smi">name</span>,<span class="pl-smi">pass</span>) {
+  <span class="pl-k">return</span> name <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>root<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> pass <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>alpine<span class="pl-pds">"</span></span>;
+});</pre></div>
+
+<h3>
+<a id="error-handling" class="anchor" href="#error-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Error handling</h3>
+
+<p>One of the many features of the Framework is that you can also specify what will happen when there are any errors, when catching exceptions, handling resources that couldn't be found, etc.</p>
+
+<p>Aeolus provides two important error handlers:</p>
+
+<p>The .onError handler that will be fired up when there Aeolus couldn't find what the user was looking for or an internal error occurred and .unauthorised that will be called when a user tried to access something without authorisation. For example:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-smi">Aeolus</span>.<span class="pl-c1">onError</span>(<span class="pl-k">function</span>(<span class="pl-smi">request</span>,<span class="pl-smi">response</span>,<span class="pl-smi">message</span>) {
+  <span class="pl-k">if</span> (message <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>TypeError: <span class="pl-pds">"</span></span>) {
+    <span class="pl-smi">response</span>.<span class="pl-en">respondPlainText</span>(<span class="pl-s"><span class="pl-pds">"</span>Internal Error<span class="pl-pds">"</span></span>,<span class="pl-c1">501</span>);
+  } <span class="pl-k">else</span> {
+    <span class="pl-smi">response</span>.<span class="pl-en">redirect</span>(<span class="pl-s"><span class="pl-pds">"</span>/404<span class="pl-pds">"</span></span>);
+  }
+});</pre></div>
+
+<p>Built with <strong>♥</strong> by Atomic Llama</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/AtomicLlama/Aeolus/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/AtomicLlama/Aeolus/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/AtomicLlama/Aeolus"></a> is maintained by <a href="https://github.com/AtomicLlama">AtomicLlama</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
