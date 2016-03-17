@@ -1,4 +1,4 @@
-![alt text](https://github.com/AtomicLlama/Aeolus/blob/master/aeolusgit.png "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/AtomicLlama/Aeolus/master/aeolusgit.png "Logo Title Text 1")
 ---
 
 Hello! This is Aeolus. The instant REST API by Atomic Llama.
