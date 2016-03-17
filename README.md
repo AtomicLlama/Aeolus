@@ -75,7 +75,7 @@ This function would take a username and a password and return if it's valid or n
 You can enter this function by calling auth. For Example:
 
 ```javascript
-var Aeolus.auth(function(name,pass) {
+Aeolus.auth(function(name,pass) {
   return name === "root" && pass === "alpine";
 });
 ```
@@ -89,7 +89,7 @@ Aeolus provides two important error handlers:
 The .onError handler that will be fired up when there Aeolus couldn't find what the user was looking for or an internal error occurred and .unauthorised that will be called when a user tried to access something without authorisation. For example:
 
 ```javascript
-var Aeolus.onError(function(request,response,message) {
+Aeolus.onError(function(request,response,message) {
   if (message == "TypeError: ") {
     response.respondPlainText("Internal Error",501);
   } else {
