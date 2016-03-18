@@ -6,8 +6,9 @@ var fs = require('fs');
 var Aeolus = function() {
   this.methodPath = "/methods";
   this.publicPath = "/www";
-  this.errorHandler = function(err) {
-    throw err;
+  this.smartMethods = [];
+  this.errorHandler = function(req,res) {
+    res.respondPlainText("Aeolus Couln't find the resource you're looking for", 404);
   };
   this.authHandler = null;
   this.unauthorisedHandler = null;
@@ -40,6 +41,9 @@ Aeolus.prototype.Response = require('./util/response.js');
 Aeolus.prototype.Request = require('./util/request.js');
 
 Aeolus.prototype.createServer = function(port,options) {
+
+  // Reading special options
+
   if (options) {
     if (options.methods) this.methods(options.methods);
     if (options.www) this.www(options.www);
@@ -56,9 +60,6 @@ Aeolus.prototype.createServer = function(port,options) {
 
   var unauth = this.unauthorisedHandler;
   var error = this.errorHandler;
-	dispatcher.onError(function(req,res) {
-		error(new Request(req),new Response(res));
-	});
 
   var unauthorised = function(req,res) {
     if (unauth !== null) {
@@ -103,14 +104,20 @@ Aeolus.prototype.createServer = function(port,options) {
     };
   };
 
+  var SmartResource = require('./util/smartResource.js');
+
   for (var i = 0; i < methods.length; i++) {
     var name = methods[i].name;
     var resources = methods[i].resources;
     dispatcher.listeners[name] = [];
     for (var j = 0; j < resources.length; j++) {
       var resource = resources[j];
-      var handler = creator(resource);
-      dispatcher.on(name,'/' + resource.name, handler);
+      if (resource.name.indexOf("(") >= 0) {
+        this.smartMethods.push(new SmartResource(resource.name,name,resource));
+      } else {
+        var handler = creator(resource);
+        dispatcher.on(name,'/' + resource.name, handler);
+      }
     }
   }
 
@@ -118,8 +125,23 @@ Aeolus.prototype.createServer = function(port,options) {
     dispatcher.dispatch(req,res);
   };
 
-  var publicPath = this.publicPath;
+  var smartMethods = this.smartMethods;
 
+  dispatcher.onError(function(req,res) {
+    var urlString = req.url;
+    var action = req.method.toLowerCase();
+    var methodsThatWork = smartMethods.filter(function(m) {
+      return m.works(urlString,action);
+    });
+    if (methodsThatWork.length > 0) {
+      var f = creator(methodsThatWork[0]);
+      f(req,res);
+    } else {
+      error(new Request(req),new Response(res));
+    }
+	});
+
+  var publicPath = this.publicPath;
   http.createServer(function (request, response) {
     getWebFile(request, response, dispatch, publicPath, error);
   }).listen(port);

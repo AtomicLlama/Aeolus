@@ -16,6 +16,10 @@ Request.prototype.getPassword = function() {
   return this.auth.pass;
 };
 
+Request.prototype.setParameter = function (name,data) {
+  this.parameters[name] = data;
+};
+
 Request.prototype.getParameter = function(field) {
   if (field) {
     return this.parameters[field];

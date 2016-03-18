@@ -11,7 +11,7 @@ function resourcesForDir(dir,pathToMethods) {
   return items.map(function(file) {
     var filename = path.join(process.cwd(), pathToMethods + "/" + dir + "/" + file);
     var method = require(filename);
-    var name = file.split(".")[0];
+    var name = file.substring(0,file.length-3).replace(".","/");
     method.name = name;
     return method;
   });

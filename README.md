@@ -129,7 +129,7 @@ The key is understanding the file structure and how to create your objects.
 ### The File Structure
 
 In your methods folder you will have a subfolder for every type of action. **(GET, POST, PUT, DELETE)**
-Inside those folders will be a file for every url you are responding to. 
+Inside those folders will be a file for every url you are responding to.
 **It's important to note that the file names will be used as their urls and they are case sensitive**
 
 For instance if your API only listens for a **GET** at "/hello": You have to create a file "hello.js" inside "/methods/get".
@@ -174,6 +174,28 @@ HelloWorld.auth(function(name, pass, callback) {
 });
 ```
 
+#### Smart Methods and Nested URLs
+
+Do you want special resources with more complicated URLs? Well that's pretty simple. Simple use a "." instead of a "/" in the filename and the URL will be nested.
+
+For instance "methods/get/user.friends.js" handles GET requests to "/user/friends".
+
+If your url needs a parameter that's simple too! Just write the parameter into the filename with "(name)" surrounding it. And that parameter will be available with request.getParameter(name).
+
+For example if you have a get request for every user in your database and what everyone to have it's own url. Just create a method in "methods/get/user.(id).js". To get the id entered just write:
+
+```javascript
+var Method = require('Aeolus').Method;
+
+var User = new Method();
+User.handle(function(request, response) {
+  var id = request.getParameter("id");
+  response.respondPlainText("Hi, user " + id);
+});
+
+module.exports = User;
+```
+
 ## Requests
 
 All your methods get called with a special Request object. Here is what you can do with it:
@@ -185,7 +207,7 @@ If you need to access that info from the method you can at all times get them di
 ```javascript
 var username = request.getUsername();
 var password = request.getPassword();
-``` 
+```
 
 ### Get Parameters
 
