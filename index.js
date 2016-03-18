@@ -56,6 +56,9 @@ Aeolus.prototype.createServer = function(port,options) {
 
   var unauth = this.unauthorisedHandler;
   var error = this.errorHandler;
+	dispatcher.onError(function(req,res) {
+		error(new Request(req),new Response(res));
+	});
 
   var unauthorised = function(req,res) {
     if (unauth !== null) {
@@ -75,17 +78,21 @@ Aeolus.prototype.createServer = function(port,options) {
           var authData = auth(req);
           if (authData) {
             if (resource.authHandler) {
-              if (resource.authHandler(authData.name,authData.pass)) {
-                resource.handler(req,res);
-              } else {
-                unauthorised(req,res);
-              }
+              resource.authHandler(authData.name,authData.pass,function(valid) {
+                if (valid) {
+                  resource.handler(req,res);
+                } else {
+                  unauthorised(req,res);
+                }
+              });
             } else {
-              if (auther(authData.name,authData.pass)) {
-                resource.handler(req,res);
-              } else {
-                unauthorised(req,res);
-              }
+              auther(authData.name,authData.pass,function(valid) {
+                if (valid) {
+                  resource.handler(req,res);
+                } else {
+                  unauthorised(req,res);
+                }
+              });
             }
           } else {
             unauthorised(req,res);

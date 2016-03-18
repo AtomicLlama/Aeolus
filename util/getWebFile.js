@@ -25,6 +25,7 @@ var getWebFile = function(request,response,callback,publicPath,error) {
       }
     });
   } catch (e) {
+    console.log("Error");
     error(request,response,e);
   }
 };

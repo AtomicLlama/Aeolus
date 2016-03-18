@@ -4,7 +4,7 @@ var url = require('url');
 var Request = function(req,server) {
   this.req = req;
   this.server = server;
-  this.auth = auth(req);
+  this.auth = auth(req) || {};
   this.parameters = url.parse(req.url, true).query;
 };
 
@@ -16,7 +16,7 @@ Request.prototype.getPassword = function() {
   return this.auth.pass;
 };
 
-Request.getParameter = function(field) {
+Request.prototype.getParameter = function(field) {
   if (field) {
     return this.parameters[field];
   }
