@@ -1,323 +1,146 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!doctype html>
+<html lang="en" ng-app="aeolus">
   <head>
-    <meta charset="UTF-8">
-    <title>Aeolus by AtomicLlama</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a responsive product landing page.">
+    <title>Aeolus - The Instant REST API</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="css/layouts/marketing.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/pretty-json.css">
   </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Aeolus</h1>
-      <h2 class="project-tagline">The instant REST API by Atomic Llama</h2>
-      <a href="https://github.com/AtomicLlama/Aeolus" class="btn">View on GitHub</a>
-      <a href="https://github.com/AtomicLlama/Aeolus/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/AtomicLlama/Aeolus/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
-    <section class="main-content">
-      <h2>
-<a id="" class="anchor" href="#" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><img src="https://raw.githubusercontent.com/AtomicLlama/Aeolus/master/aeolusgit.png" alt="alt text" title="Logo Title Text 1">
-</h2>
-
-<p>Hello! This is Aeolus. The instant REST API by Atomic Llama.</p>
-
-<p>Aeolus allows you to create a fast, simple and extendible REST API in seconds.</p>
-
-<p>One of the key features of the framework is that it allows you to host a website and your REST API on the same server with the minimal amount of code.</p>
-
-<h2>
-<a id="installing-aeolus" class="anchor" href="#installing-aeolus" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing Aeolus</h2>
-
-<p>Aeolus works with node and you can use it to start from scratch or compliment your current project.</p>
-
-<h3>
-<a id="starting-from-scratch" class="anchor" href="#starting-from-scratch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starting From Scratch</h3>
-
-<p>To create a new project with Aeolus you will need Node and npm installed <a href="http://nodejs.org">http://nodejs.org</a> and <a href="https://www.npmjs.com">https://www.npmjs.com</a></p>
-
-<p>Once done with that. You can install Aeolus from the terminal.</p>
-
-<pre><code>$ npm install aeolus -g
-</code></pre>
-
-<p>To create your project you can navigate to the folder where you want it (or create one) and run our wizard with</p>
-
-<pre><code>$ aeolus
-</code></pre>
-
-<p>Simply follow the steps and you will have a whole project already in front of you!</p>
-
-<h3>
-<a id="add-aeolus-to-your-current-project" class="anchor" href="#add-aeolus-to-your-current-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add Aeolus to your current project</h3>
-
-<p>Perhaps you already know a bit about Node and don't need our wizard.</p>
-
-<p>Simply run:</p>
-
-<pre><code>$ npm install aeolus --save
-</code></pre>
-
-<p>And our Framework will be already installed for you to use.</p>
-
-<h2>
-<a id="staring-it" class="anchor" href="#staring-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Staring it</h2>
-
-<p>To use kickstart Aeolus you simply have to call the function createServer with the port number you want it to listen to.</p>
-
-<p>We recommend having this code:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> Aeolus <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>Aeolus<span class="pl-pds">'</span></span>);
-
-<span class="pl-k">var</span> port <span class="pl-k">=</span> <span class="pl-c1">process</span>.<span class="pl-smi">env</span>.<span class="pl-c1">PORT</span> <span class="pl-k">||</span> <span class="pl-c1">8080</span>;
-
-<span class="pl-smi">Aeolus</span>.<span class="pl-en">createServer</span>(port);</pre></div>
-
-<h2>
-<a id="more-options" class="anchor" href="#more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More Options</h2>
-
-<h3>
-<a id="other-folders" class="anchor" href="#other-folders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other folders</h3>
-
-<p>Aeolus will by default listen to the "/methods" and "/www" folders for your API and public page. But you can give Aeolus another path to listen to instead with the functions .methods and .www. For Example:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-en">methods</span>(<span class="pl-s"><span class="pl-pds">"</span>/api<span class="pl-pds">"</span></span>);  <span class="pl-c">// API Methods are now in the /api folder</span>
-<span class="pl-smi">Aeolus</span>.<span class="pl-en">methods</span>(<span class="pl-s"><span class="pl-pds">"</span>/html<span class="pl-pds">"</span></span>); <span class="pl-c">// Web page is now in the /html folder</span></pre></div>
-
-<h3>
-<a id="authentification" class="anchor" href="#authentification" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentification</h3>
-
-<p>You can tell Aeolus how authentication works in your site by providing an authentication function.
-This function would take a username and a password and callback a function with a boolean value (representing if the auth info is valid). So that all methods marked as needing Authentication will prompt the user for a password.</p>
-
-<p>You can enter this function by calling auth. For Example:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-en">auth</span>(<span class="pl-k">function</span>(<span class="pl-smi">name</span>,<span class="pl-smi">pass</span>,<span class="pl-smi">callback</span>) {
-  <span class="pl-k">var</span> valid <span class="pl-k">=</span> name <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>root<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> pass <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>alpine<span class="pl-pds">"</span></span>;
-  <span class="pl-en">callback</span>(valid);
-});</pre></div>
-
-<h3>
-<a id="error-handling" class="anchor" href="#error-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Error handling</h3>
-
-<p>One of the many features of the Framework is that you can also specify what will happen when there are any errors, when catching exceptions, handling resources that couldn't be found, etc.</p>
-
-<p>Aeolus provides two important error handlers:</p>
-
-<p>The .onError handler that will be fired up when there Aeolus couldn't find what the user was looking for or an internal error occurred and .unauthorised that will be called when a user tried to access something without authorisation. For example:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-c1">onError</span>(<span class="pl-k">function</span>(<span class="pl-smi">request</span>,<span class="pl-smi">response</span>,<span class="pl-smi">message</span>) {
-  <span class="pl-k">if</span> (<span class="pl-smi">message</span>.<span class="pl-c1">indexOf</span>(<span class="pl-s"><span class="pl-pds">"</span>TypeError<span class="pl-pds">"</span></span>) <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>) {
-    <span class="pl-smi">response</span>.<span class="pl-en">respondPlainText</span>(<span class="pl-s"><span class="pl-pds">"</span>Internal Error<span class="pl-pds">"</span></span>,<span class="pl-c1">501</span>);
-  } <span class="pl-k">else</span> {
-    <span class="pl-smi">response</span>.<span class="pl-en">redirect</span>(<span class="pl-s"><span class="pl-pds">"</span>/404<span class="pl-pds">"</span></span>);
-  }
-});</pre></div>
-
-<p>And the .unauthorised handler that gets called when the auth information entered by the user is incorrect!</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-en">unauthorised</span>(<span class="pl-k">function</span>(<span class="pl-smi">request</span>,<span class="pl-smi">response</span>) {
-  <span class="pl-smi">response</span>.<span class="pl-en">promptForPassword</span>(<span class="pl-s"><span class="pl-pds">"</span>Please enter a password<span class="pl-pds">"</span></span>);
-});</pre></div>
-
-<h2>
-<a id="having-a-public-page" class="anchor" href="#having-a-public-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Having a public page</h2>
-
-<p>One of the great things about Aeolus is that it allows you to create an API and at the same time serve your own webpage!</p>
-
-<p>Aeolus will by default make anything inside the "/www" folder public. So basically every single document inside the "/www" folder will have it's own url.</p>
-
-<p>You can obviously change the path of the folder with the function:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">Aeolus</span>.<span class="pl-en">www</span>(<span class="pl-s"><span class="pl-pds">'</span>/path/to/new/folder<span class="pl-pds">'</span></span>);</pre></div>
-
-<h2>
-<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
-
-<p>Methods are the key to your REST API!
-You will have to create a Method Object in it's own file for every action available in your API.</p>
-
-<p>The key is understanding the file structure and how to create your objects.</p>
-
-<h3>
-<a id="the-file-structure" class="anchor" href="#the-file-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The File Structure</h3>
-
-<p>In your methods folder you will have a subfolder for every type of action. <strong>(GET, POST, PUT, DELETE)</strong>
-Inside those folders will be a file for every url you are responding to.
-<strong>It's important to note that the file names will be used as their urls and they are case sensitive</strong></p>
-
-<p>For instance if your API only listens for a <strong>GET</strong> at "/hello": You have to create a file "hello.js" inside "/methods/get".</p>
-
-<h3>
-<a id="creating-the-method" class="anchor" href="#creating-the-method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating The Method</h3>
-
-<p>The big question is what should the file look like. Take this simple HelloWorld example:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> Method <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>Aeolus<span class="pl-pds">'</span></span>).<span class="pl-smi">Method</span>;
-
-<span class="pl-k">var</span> HelloWorld <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Method</span>();
-<span class="pl-smi">HelloWorld</span>.<span class="pl-en">handle</span>(<span class="pl-k">function</span>(<span class="pl-smi">request</span>, <span class="pl-smi">response</span>) {
-  <span class="pl-smi">response</span>.<span class="pl-en">respondPlainText</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello World!<span class="pl-pds">"</span></span>);
-});
-
-<span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> HelloWorld;</pre></div>
-
-<h3>
-<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h3>
-
-<h4>
-<a id="authentification-1" class="anchor" href="#authentification-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentification</h4>
-
-<h5>
-<a id="asking-for-authentication" class="anchor" href="#asking-for-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Asking For Authentication</h5>
-
-<p>If your method requires authentication simply call the .setHasAuth function. For Example with the HelloWorld Method:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">HelloWorld</span>.<span class="pl-en">setHasAuth</span>(<span class="pl-c1">true</span>);</pre></div>
-
-<p>This makes it so that if the Method get's called, the global Authentication Handler will be called first. If it doesn't clear up, the method won't even be called.</p>
-
-<h5>
-<a id="special-authentication-handler" class="anchor" href="#special-authentication-handler" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Special Authentication Handler</h5>
-
-<p>Sometimes you need different Authentication handlers for different Methods. No problem!
-You can add special handler that will only be called with that method by calling the function .auth. For example if the HelloWorld method only works for the user "root":</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">HelloWorld</span>.<span class="pl-en">auth</span>(<span class="pl-k">function</span>(<span class="pl-smi">name</span>, <span class="pl-smi">pass</span>, <span class="pl-smi">callback</span>) {
-  <span class="pl-en">callback</span>(name <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>root<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> pass <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">"</span>alpine<span class="pl-pds">"</span></span>);
-});</pre></div>
-
-<h4>
-<a id="smart-methods-and-nested-urls" class="anchor" href="#smart-methods-and-nested-urls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Smart Methods and Nested URLs</h4>
-
-<p>Do you want special resources with more complicated URLs? Well that's pretty simple. Simple use a "." instead of a "/" in the filename and the URL will be nested.</p>
-
-<p>For instance "methods/get/user.friends.js" handles GET requests to "/user/friends".</p>
-
-<p>If your url needs a parameter that's simple too! Just write the parameter into the filename with "(name)" surrounding it. And that parameter will be available with request.getParameter(name).</p>
-
-<p>For example if you have a get request for every user in your database and what everyone to have it's own url. Just create a method in "methods/get/user.(id).js". To get the id entered just write:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> Method <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>Aeolus<span class="pl-pds">'</span></span>).<span class="pl-smi">Method</span>;
-
-<span class="pl-k">var</span> User <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Method</span>();
-<span class="pl-smi">User</span>.<span class="pl-en">handle</span>(<span class="pl-k">function</span>(<span class="pl-smi">request</span>, <span class="pl-smi">response</span>) {
-  <span class="pl-k">var</span> id <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getParameter</span>(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>);
-  <span class="pl-smi">response</span>.<span class="pl-en">respondPlainText</span>(<span class="pl-s"><span class="pl-pds">"</span>Hi, user <span class="pl-pds">"</span></span> <span class="pl-k">+</span> id);
-});
-
-<span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> User;</pre></div>
-
-<h2>
-<a id="requests" class="anchor" href="#requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requests</h2>
-
-<p>All your methods get called with a special Request object. Here is what you can do with it:</p>
-
-<h3>
-<a id="get-authentication-data" class="anchor" href="#get-authentication-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get Authentication Data</h3>
-
-<p>If you need to access that info from the method you can at all times get them directly:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> username <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getUsername</span>();
-<span class="pl-k">var</span> password <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getPassword</span>();</pre></div>
-
-<h3>
-<a id="get-parameters" class="anchor" href="#get-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get Parameters</h3>
-
-<p>You can get any parameter that may be embedded into the url.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> query <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getParameter</span>(<span class="pl-s"><span class="pl-pds">'</span>query<span class="pl-pds">'</span></span>);</pre></div>
-
-<h3>
-<a id="get-the-body-of-the-message" class="anchor" href="#get-the-body-of-the-message" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get the body of the Message</h3>
-
-<p>To get the body of the message (Should only be used for POST) there's the .getBody function</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> data <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getBody</span>();</pre></div>
-
-<h3>
-<a id="get-the-original-request-object" class="anchor" href="#get-the-original-request-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get the original request Object</h3>
-
-<p>For those who know Node better, you can also directly handle the regular http response object:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> req <span class="pl-k">=</span> <span class="pl-smi">request</span>.<span class="pl-en">getRequestObject</span>();</pre></div>
-
-<h2>
-<a id="responses" class="anchor" href="#responses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Responses</h2>
-
-<p>Just like with the Requests, you also get special Response objects with their only simplifications.</p>
-
-<h3>
-<a id="respond" class="anchor" href="#respond" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Respond</h3>
-
-<p>There are many ways you can quickly respond. Status and headers are always optional and the defaults will be used if you don't specify them.</p>
-
-<h4>
-<a id="json" class="anchor" href="#json" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JSON</h4>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> myObject <span class="pl-k">=</span> {
-  name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>My Object<span class="pl-pds">"</span></span>,
-  id<span class="pl-k">:</span> <span class="pl-c1">42</span>
-};
-<span class="pl-smi">response</span>.<span class="pl-en">respondJSON</span>(myObject);</pre></div>
-
-<p>Or if you want to include more information like the header:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> headers <span class="pl-k">=</span> {
-  <span class="pl-s"><span class="pl-pds">'</span>Access-Control-Allow-Origin<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>,
-  <span class="pl-s"><span class="pl-pds">'</span>Access-Control-Allow-Methods<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>GET, POST<span class="pl-pds">'</span></span>,
-  <span class="pl-s"><span class="pl-pds">'</span>Access-Control-Allow-Headers<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Origin, X-Requested-With, Content-Type, Accept<span class="pl-pds">'</span></span>
-};
-<span class="pl-smi">response</span>.<span class="pl-en">respondJSON</span>(myObject, <span class="pl-c1">201</span>, headers);</pre></div>
-
-<h4>
-<a id="plain-text" class="anchor" href="#plain-text" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Plain Text</h4>
-
-<p>The same goes for when responding only with text:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">response</span>.<span class="pl-en">respondPlainText</span>(<span class="pl-s"><span class="pl-pds">"</span>This is my response: 42<span class="pl-pds">"</span></span>);</pre></div>
-
-<h4>
-<a id="a-file" class="anchor" href="#a-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A File</h4>
-
-<p>Simply call the function with the path to the file. You are not allowed to put your own headers on this one.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">response</span>.<span class="pl-en">respondFile</span>(<span class="pl-s"><span class="pl-pds">"</span>path/to/file.ext<span class="pl-pds">"</span></span>);</pre></div>
-
-<h3>
-<a id="prompt-for-password" class="anchor" href="#prompt-for-password" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prompt for password</h3>
-
-<p>If you think the user forgot to put the auth info on there request you can prompt them again:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">response</span>.<span class="pl-en">promptPassword</span>(<span class="pl-s"><span class="pl-pds">"</span>Please Enter a Password<span class="pl-pds">"</span></span>);</pre></div>
-
-<h3>
-<a id="redirect-the-user-to-somewhere-else" class="anchor" href="#redirect-the-user-to-somewhere-else" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Redirect the user to somewhere else</h3>
-
-<p>You can also simply redirect the user to another place with, for example:</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">response</span>.<span class="pl-en">redirect</span>(<span class="pl-s"><span class="pl-pds">"</span>http://www.google.com<span class="pl-pds">"</span></span>);</pre></div>
-
-<h3>
-<a id="get-the-original-object" class="anchor" href="#get-the-original-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get The Original Object</h3>
-
-<p>We can also give you the regular response object that if you need something more tailored or down at the metal.</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> res <span class="pl-k">=</span> <span class="pl-smi">response</span>.<span class="pl-en">getResponseObject</span>();</pre></div>
-
-<p>Built with <strong>♥</strong> by Atomic Llama</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/AtomicLlama/Aeolus">Aeolus</a> is maintained by <a href="https://github.com/AtomicLlama">AtomicLlama</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
+  <body ng-controller="MainCtrl">
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a style="font-family: Lobster;" class="pure-menu-heading" href="">A<span style="text-transform: lowercase;">eolus</span></a>
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="#start" class="pure-menu-link">Try Me!</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/AtomicLlama/Aeolus" class="pure-menu-link">Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="splash-container">
+      <div class="splash">
+        <h4 class="splash-subhead">Hello! I am</h4>
+        <h1 class="splash-head">
+          Aeolus</h1>
+        <p class="splash-subhead">
+          I am the Instant REST API
+        </p>
+        <p>
+          <a href="#start" class="pure-button pure-button-primary">Get Started</a>
+        </p>
+      </div>
+    </div>
+    <div class="content-wrapper">
+      <div class="content">
+        <h2 class="content-head is-center">What I can do!</h2>
+        <div class="pure-g">
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-rocket"></i>
+              Get Started Quickly
+            </h3>
+            <p>
+              I allow you to create a REST API really quickly! We do this by giving you a folder for every method you want support!
+            </p>
+            <p>
+              <b>GET, POST, PUT, DELETE</b>
+            </p>
+          </div>
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-code"></i>
+              Quick and Simple Coding
+            </h3>
+            <p>
+              Our Framework makes writing very simple. You create a simple and short file for every action you allow on your API. Our main goal is making code easier to read!
+            </p>
+          </div>
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-th-large"></i>
+              Your site your way
+            </h3>
+            <p>
+              Instead of having a separate server for your website simply host it on the same one. Simply put the files in the
+              <b>/www</b>
+              folder and
+              <b>BOOM!</b>. It's done.
+            </p>
+          </div>
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-check-square-o"></i>
+              Fully customisable
+            </h3>
+            <p>
+              I run on NodeJS so that you may use all of the other resources of Node to create the experience you want.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ribbon l-box-lrg pure-g" style="background: #1f8dd6;">
+        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+          <img class="pure-img-responsive" alt="File Icons" width="300" src="img/pow.png">
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+          <h2 class="content-head content-head-ribbon">Lightweight yet powerful</h2>
+          <p style="color: white">
+            I take care of everything for you. Authentication, data transfer, job scheduling you name it! It will take care of it.
+          </p>
+          <p style="color: white">
+            I was made with the intention of getting rid of the boring stuff about getting your API. So code on!
+          </p>
+        </div>
+      </div>
+
+      <div class="content" id="start">
+        <h2 class="content-head is-center">Getting Started</h2>
+
+        <div class="l-box-lrg pure-u-1">
+          <div class="pure-u-1-5">
+
+          </div>
+          <div class="pure-u-3-5">
+            <h1>Installing Aeolus</h1>
+            <p>
+              Aeolus works with node and you can use it to start from scratch or compliment your current project.
+            </p>
+            <h2>Starting From Scratch</h2>
+            <p>
+              To create a new project with Aeolus you will need <a href="http://nodejs.org">NodeJS</a> and <a href="http://npmjs.com">npm</a> installed. Once done with that. You can install Aeolus from the terminal.
+            </p>
+              <code>$ npm install aeolus -g</code>
+              <p>
+                To create your project you can navigate to the folder where you want it (or create one) and run our wizard and follow the steps
+              </p>
+              <code>$ aeolus</code>
+              <h5>TADA!!! You have a new project!</h5>
+              <h2>Add Aeolus to your current project</h2>
+              <p>
+                Perhaps you already know a bit about Node and don't need our wizard. Simply run:
+              </p>
+              <code>$ npm install aeolus --save</code>
+              <p>
+                And our Framework will be already installed for you to use. For more information on how Aeolus works and how to use it check out our <a href="https://github.com/AtomicLlama/Aeolus">GitHub Page</a>
+              </p>
+          </div>
+        </div>
+      </div>
+      <div class="footer l-box is-center" style="color: white">
+        Built with
+        <b>♥</b>
+        by Atomic Llama
+      </div>
+    </div>
   </body>
 </html>
