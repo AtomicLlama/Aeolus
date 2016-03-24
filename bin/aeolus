@@ -11,7 +11,7 @@ var rl = readline.createInterface({
 });
 
 console.log("Thank you for using Aeolus by AtomicLlama");
-console.log("We will now set up your new REST API");
+console.log("We will now set up your new REST API\n");
 
 rl.question('Name of your Project: ', function(answer) {
   var name = answer || "API";
@@ -19,14 +19,18 @@ rl.question('Name of your Project: ', function(answer) {
     var description = answer || "My new API";
     rl.question('Version of your Project: (1.0.0) ', function(answer) {
       var version = answer || "1.0.0";
-      rl.close();
       console.log("Thank you! we're now configuring your project!");
+      console.log("Prepping folder.");
       exec("git init", function(error,stdout,stderr) {
         console.log(stdout);
+        console.log("Adding origin for example project.");
         exec("git remote add origin " + files, function(error,stdout,stderr) {
           console.log(stdout);
+          console.log("Fetching example code.");
           exec("git pull origin master",function(error,stdout,stderr) {
             console.log(stdout);
+            console.log("Done fetching!");
+            console.log("Setting up your preferences!");
             fs.readFile('package.json', function(err,data) {
               if (err === null) {
                 var package = JSON.parse(data);
@@ -37,7 +41,21 @@ rl.question('Name of your Project: ', function(answer) {
                   if (error) {
                     console.error(error);
                   } else {
-                    console.log("Done! Your project is ready!");
+                    console.log("Installing Dependencies");
+                    exec("npm install",function(error,stdout,stderr) {
+                      console.log(stdout);
+                      console.log("Dependencies installed\n\n");
+                      rl.question('Do you want to start the project? (Y,N)', function(answer) {
+                        rl.close();
+                        var should = answer.toLowerCase().indexOf('y') >= 0;
+                        if (should) {
+                          exec("npm start", function(error,stdout,stderr) {});
+                        } else {
+                          console.log("Done here!");
+                          console.log("Perform 'npm start' to check your project.");
+                        }
+                      });
+                    });
                   }
                 });
               } else {

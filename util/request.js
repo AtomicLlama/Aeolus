@@ -28,7 +28,7 @@ Request.prototype.getParameter = function(field) {
 };
 
 Request.prototype.getBody = function () {
-  return req.body;
+  return this.req.body;
 };
 
 Request.prototype.getParameters = function () {

@@ -2,6 +2,7 @@ var http = require('http');
 var dispatcher = require('httpdispatcher');
 var auth = require('basic-auth');
 var fs = require('fs');
+var path = require('path');
 
 var Aeolus = function() {
   this.methodPath = "/methods";
@@ -10,8 +11,20 @@ var Aeolus = function() {
   this.errorHandler = function(req,res) {
     res.respondPlainText("Aeolus Couln't find the resource you're looking for", 404);
   };
+  this.opens = false;
   this.authHandler = null;
   this.unauthorisedHandler = null;
+  var filename = path.join(process.cwd(), 'package.json');
+  var file = fs.readFileSync(filename);
+  var data = JSON.parse(file);
+  if (data.aeolus && data.aeolus.paths) {
+    this.methodPath = data.aeolus.paths.methods || "/methods";
+    this.publicPath = data.aeolus.paths.web || "/www";
+  }
+};
+
+Aeolus.prototype.setOpens = function(b) {
+  this.opens = b;
 };
 
 Aeolus.prototype.onError = function(f) {
@@ -54,8 +67,11 @@ Aeolus.prototype.createServer = function(port,options) {
 
   var getWebFile = require('./util/getWebFile.js');
   var getMethods = require('./util/getMethods.js');
+  
   var Response = require('./util/response.js');
   var Request = require('./util/request.js');
+  var SmartResource = require('./util/smartResource.js');
+
   var methods = getMethods(this.methodPath);
 
   var unauth = this.unauthorisedHandler;
@@ -104,8 +120,6 @@ Aeolus.prototype.createServer = function(port,options) {
     };
   };
 
-  var SmartResource = require('./util/smartResource.js');
-
   for (var i = 0; i < methods.length; i++) {
     var name = methods[i].name;
     var resources = methods[i].resources;
@@ -145,6 +159,11 @@ Aeolus.prototype.createServer = function(port,options) {
   http.createServer(function (request, response) {
     getWebFile(request, response, dispatch, publicPath, error);
   }).listen(port);
+
+  if (this.opens) {
+    var spawn = require('child_process').spawn;
+    spawn('open', ['http://localhost:' + port + "/"]);
+  }
 
 };
 
