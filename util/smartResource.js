@@ -46,7 +46,7 @@ SmartResource.prototype.getParameters = function(url)  {
     if (this.parts[i].isParameter) {
       parameters.push({
         name: this.parts[i].name,
-        data: parts[i]
+        data: parts[i] ? parts[i].split("?")[0] : null
       });
     }
   }
