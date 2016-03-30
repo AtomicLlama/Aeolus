@@ -41,7 +41,7 @@ $ npm install aeolus --save
 
 And our Framework will be already installed for you to use.
 
-## Staring it
+## Starting it
 
 To use kickstart Aeolus you simply have to call the function createServer with the port number you want it to listen to.
 
@@ -67,7 +67,7 @@ Aeolus.methods("/api");  // API Methods are now in the /api folder
 Aeolus.methods("/html"); // Web page is now in the /html folder
 ```
 
-### Authentification
+### Authentication
 
 You can tell Aeolus how authentication works in your site by providing an authentication function.
 This function would take a username and a password and callback a function with a boolean value (representing if the auth info is valid). So that all methods marked as needing Authentication will prompt the user for a password.
@@ -151,7 +151,7 @@ module.exports = HelloWorld;
 
 ### Options
 
-#### Authentification
+#### Authentication
 
 ##### Asking For Authentication
 
