@@ -45,17 +45,8 @@ Aeolus.prototype.www = function(path) {
 
 Aeolus.prototype.load = function () {
   var SmartResource = require('./util/smartResource.js');
-  var unauth = this.unauthorisedHandler;
   var getMethods = require('./util/getMethods.js');
   var methods = getMethods(this.methodPath);
-
-  var unauthorised = function(req,res) {
-    if (unauth !== null) {
-      unauth(req,res);
-    } else {
-      res.promptPassword("Please enter a Password");
-    }
-  };
 
   for (var i = 0; i < methods.length; i++) {
     var name = methods[i].name;
@@ -74,6 +65,7 @@ Aeolus.prototype.load = function () {
 
   var smartMethods = this.smartMethods;
   var error = this.errorHandler;
+  var aeolus = this;
 
   dispatcher.onError(function(req,res) {
     var Response = require('./util/response.js');
@@ -84,7 +76,7 @@ Aeolus.prototype.load = function () {
       return m.works(urlString,action);
     });
     if (methodsThatWork.length > 0) {
-      var f = creator(methodsThatWork[0]);
+      var f = aeolus.functionForResource(methodsThatWork[0]);
       f(req,res);
     } else {
       error(new Request(req),new Response(res));
@@ -97,6 +89,14 @@ Aeolus.prototype.functionForResource = function (resource) {
   var Response = require('./util/response.js');
   var Request = require('./util/request.js');
   var auther = this.authHandler;
+  var unauth = this.unauthorisedHandler;
+  var unauthorised = function(req,res) {
+    if (unauth !== null) {
+      unauth(req,res);
+    } else {
+      res.promptPassword("Please enter a Password");
+    }
+  };
   return function(re,r) {
       var res = new Response(r);
       var req = new Request(re,this);

@@ -1,3 +1,6 @@
+var fs = require('fs');
+var path = require('path');
+
 var Response = function(res) {
   this.res = res;
 };
@@ -10,14 +13,15 @@ Response.prototype.respondJSON = function(object, status, headers) {
 };
 
 Response.prototype.respondFile = function (filename, status) {
+  filename = path.join(process.cwd(), filename);
+  var res = this.res;
   fs.readFile(filename, "binary", function(err, file) {
-    var h = headers || {};
     if(err) {
       throw err;
     } else {
-      response.writeHead(status);
-      response.write(file, "binary");
-      response.end();
+      res.writeHead(status || 200);
+      res.write(file, "binary");
+      res.end();
     }
   });
 };
