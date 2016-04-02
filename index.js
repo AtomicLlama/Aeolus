@@ -5,13 +5,10 @@ var fs = require('fs');
 var path = require('path');
 
 var Aeolus = function() {
-  this.methodPath = "/methods";
-  this.publicPath = "/www";
   this.smartMethods = [];
   this.errorHandler = function(req,res) {
     res.respondPlainText("Aeolus Couln't find the resource you're looking for", 404);
   };
-  this.opens = false;
   this.authHandler = null;
   this.unauthorisedHandler = null;
   var filename = path.join(process.cwd(), 'package.json');
@@ -20,11 +17,10 @@ var Aeolus = function() {
   if (data.aeolus && data.aeolus.paths) {
     this.methodPath = data.aeolus.paths.methods || "/methods";
     this.publicPath = data.aeolus.paths.web || "/www";
+  } else {
+    this.methodPath = "/methods";
+    this.publicPath = "/www";
   }
-};
-
-Aeolus.prototype.setOpens = function(b) {
-  this.opens = b;
 };
 
 Aeolus.prototype.onError = function(f) {
@@ -47,6 +43,92 @@ Aeolus.prototype.www = function(path) {
   this.publicPath = path;
 };
 
+Aeolus.prototype.load = function () {
+  var SmartResource = require('./util/smartResource.js');
+  var unauth = this.unauthorisedHandler;
+  var getMethods = require('./util/getMethods.js');
+  var methods = getMethods(this.methodPath);
+
+  var unauthorised = function(req,res) {
+    if (unauth !== null) {
+      unauth(req,res);
+    } else {
+      res.promptPassword("Please enter a Password");
+    }
+  };
+
+  for (var i = 0; i < methods.length; i++) {
+    var name = methods[i].name;
+    var resources = methods[i].resources;
+    dispatcher.listeners[name] = [];
+    for (var j = 0; j < resources.length; j++) {
+      var resource = resources[j];
+      if (resource.name.indexOf("(") >= 0) {
+        this.smartMethods.push(new SmartResource(resource.name,name,resource));
+      } else {
+        var handler = this.functionForResource(resource);
+        dispatcher.on(name,'/' + resource.name, handler);
+      }
+    }
+  }
+
+  var smartMethods = this.smartMethods;
+  var error = this.errorHandler;
+
+  dispatcher.onError(function(req,res) {
+    var Response = require('./util/response.js');
+    var Request = require('./util/request.js');
+    var urlString = req.url;
+    var action = req.method.toLowerCase();
+    var methodsThatWork = smartMethods.filter(function(m) {
+      return m.works(urlString,action);
+    });
+    if (methodsThatWork.length > 0) {
+      var f = creator(methodsThatWork[0]);
+      f(req,res);
+    } else {
+      error(new Request(req),new Response(res));
+    }
+	});
+
+};
+
+Aeolus.prototype.functionForResource = function (resource) {
+  var Response = require('./util/response.js');
+  var Request = require('./util/request.js');
+  var auther = this.authHandler;
+  return function(re,r) {
+      var res = new Response(r);
+      var req = new Request(re,this);
+      if (resource.authHandler || (auther !== null && resource.needsAuth)) {
+        var authData = auth(req);
+        if (authData) {
+          if (resource.authHandler) {
+            resource.authHandler(authData.name,authData.pass,function(valid) {
+              if (valid) {
+                resource.handler(req,res);
+              } else {
+                unauthorised(req,res);
+              }
+            });
+          } else {
+            auther(authData.name,authData.pass,function(valid) {
+              if (valid) {
+                resource.handler(req,res);
+              } else {
+                unauthorised(req,res);
+              }
+            });
+          }
+        } else {
+          unauthorised(req,res);
+        }
+    } else {
+      resource.handler(req,res);
+    }
+  };
+};
+
 Aeolus.prototype.Method = require('./util/method.js');
 
 Aeolus.prototype.Response = require('./util/response.js');
@@ -65,105 +147,34 @@ Aeolus.prototype.createServer = function(port,options) {
     if (options.onError) this.onError(options.onError);
   }
 
-  var getWebFile = require('./util/getWebFile.js');
-  var getMethods = require('./util/getMethods.js');
-  
-  var Response = require('./util/response.js');
-  var Request = require('./util/request.js');
-  var SmartResource = require('./util/smartResource.js');
+  this.load();
 
-  var methods = getMethods(this.methodPath);
-
-  var unauth = this.unauthorisedHandler;
   var error = this.errorHandler;
+  var publicPath = this.publicPath;
+  var methodPath = path.join(process.cwd(), this.methodPath);
 
-  var unauthorised = function(req,res) {
-    if (unauth !== null) {
-      unauth(req,res);
-    } else {
-      res.promptPassword("Please enter a Password");
-    }
-  };
-
-  var auther = this.authHandler;
-
-  var creator = function(resource) {
-    return function(re,r) {
-        var res = new Response(r);
-        var req = new Request(re,this);
-        if (resource.authHandler || (auther !== null && resource.needsAuth)) {
-          var authData = auth(req);
-          if (authData) {
-            if (resource.authHandler) {
-              resource.authHandler(authData.name,authData.pass,function(valid) {
-                if (valid) {
-                  resource.handler(req,res);
-                } else {
-                  unauthorised(req,res);
-                }
-              });
-            } else {
-              auther(authData.name,authData.pass,function(valid) {
-                if (valid) {
-                  resource.handler(req,res);
-                } else {
-                  unauthorised(req,res);
-                }
-              });
-            }
-          } else {
-            unauthorised(req,res);
-          }
-      } else {
-        resource.handler(req,res);
-      }
-    };
-  };
-
-  for (var i = 0; i < methods.length; i++) {
-    var name = methods[i].name;
-    var resources = methods[i].resources;
-    dispatcher.listeners[name] = [];
-    for (var j = 0; j < resources.length; j++) {
-      var resource = resources[j];
-      if (resource.name.indexOf("(") >= 0) {
-        this.smartMethods.push(new SmartResource(resource.name,name,resource));
-      } else {
-        var handler = creator(resource);
-        dispatcher.on(name,'/' + resource.name, handler);
-      }
-    }
-  }
+  var getWebFile = require('./util/getWebFile.js');
 
   var dispatch = function(req,res) {
     dispatcher.dispatch(req,res);
   };
 
-  var smartMethods = this.smartMethods;
-
-  dispatcher.onError(function(req,res) {
-    var urlString = req.url;
-    var action = req.method.toLowerCase();
-    var methodsThatWork = smartMethods.filter(function(m) {
-      return m.works(urlString,action);
-    });
-    if (methodsThatWork.length > 0) {
-      var f = creator(methodsThatWork[0]);
-      f(req,res);
-    } else {
-      error(new Request(req),new Response(res));
-    }
-	});
-
-  var publicPath = this.publicPath;
   http.createServer(function (request, response) {
     getWebFile(request, response, dispatch, publicPath, error);
   }).listen(port);
 
-  if (this.opens) {
-    var spawn = require('child_process').spawn;
-    spawn('open', ['http://localhost:' + port + "/"]);
-  }
+  var aeolus = this;
+
+  options = {
+    persistent: true,
+    recursive: true
+  };
+  fs.watch(methodPath, options, function(event, filename) {
+    var parts = filename.split(".");
+    if (parts[parts.length-1] === "js") {
+      aeolus.load();
+    }
+  });
 
 };
 

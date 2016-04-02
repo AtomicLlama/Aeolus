@@ -5,7 +5,8 @@ var URLPart = function(name,isParameter) {
 
 URLPart.prototype.works = function(part) {
   if (!this.isParameter) {
-    return this.name === part;
+    var actualPart = part.split("?").filter(function(p) { return p !== '';})[0];
+    return this.name === actualPart;
   }
   return true;
 };
@@ -43,10 +44,10 @@ SmartResource.prototype.getParameters = function(url)  {
   var parameters = [];
   var parts = url.split("/").filter(function(p) { return p !== '';});
   for (var i = 0; i < this.parts.length; i++) {
-    if (this.parts[i].isParameter) {
+    if (this.parts[i].isParameter && parts[i]) {
       parameters.push({
         name: this.parts[i].name,
-        data: parts[i] ? parts[i].split("?")[0] : null
+        data: parts[i].split("?")[0]
       });
     }
   }

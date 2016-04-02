@@ -10,6 +10,9 @@ function resourcesForDir(dir,pathToMethods) {
   });
   return items.map(function(file) {
     var filename = path.join(process.cwd(), pathToMethods + "/" + dir + "/" + file);
+    if (require.cache[filename]) {
+      require.cache[filename] = undefined;
+    }
     var method = require(filename);
     var name = file.substring(0,file.length-3).replace(".","/");
     method.name = name;
