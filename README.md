@@ -7,6 +7,48 @@ Aeolus allows you to create a fast, simple and extendible REST API in seconds.
 
 One of the key features of the framework is that it allows you to host a website and your REST API on the same server with the minimal amount of code.
 
+**Table of Contents**
+
+1. [Installing Aeolus](#installing-aeolus)
+  - [Starting From Scratch](#starting-from-scratch)
+  - [Add Aeolus to your current project](#add-aeolus-to-your-current-project)
+2. [Starting it](#starting-it)
+3. [More Options](#more-options)
+  - [Other folders](#other-folders)
+  - [Authentication](#authentication)
+  - [Error handling](#error-handling)
+4. [Having a public page](#having-a-public-page)
+5. [Methods](#methods)
+  - [The File Structure](#the-file-structure)
+  - [Creating The Method](#creating-the-method)
+  - [Options](#options)
+    - [Authentication](#authentication-1)
+      - [Asking For Authentication](#asking-for-authentication)
+      - [Special Authentication Handler](#special-authentication-handler)
+    - [Smart Methods and Nested URLs](#smart-methods-and-nested-urls)
+6. [Requests](#requests)
+  - [Get Authentication Data](#get-authentication-data)
+  - [Get Parameters](#get-parameters)
+  - [Get the body of the Message](#get-the-body-of-the-message)
+  - [Get the original request Object](#get-the-original-request-object)
+7. [Responses](#responses)
+  - [Respond](#respond)
+    - [JSON](#json)
+    - [Plain Text](#plain-text)
+    - [A File](#a-file)
+  - [Prompt for password](#prompt-for-password)
+  - [Redirect the user to somewhere else](#redirect-the-user-to-somewhere-else)
+  - [Get The Original Object](#get-the-original-object)
+8. [Database Access](#database-access)
+  - [Finding an element](#finding-an-element)
+  - [Finding all elements](#finding-all-elements)
+  - [Edit an elements](#edit-an-elements)
+  - [Map (Edit many)](#map-edit-many)
+  - [Insert](#insert)
+  - [Delete](#delete)
+  - [Reduce](#reduce)
+  - [Methods as DB Wrappers](#methods-as-db-wrappers)
+
 ## Installing Aeolus
 
 Aeolus works with node and you can use it to start from scratch or compliment your current project.
