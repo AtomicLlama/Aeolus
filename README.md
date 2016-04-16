@@ -302,4 +302,182 @@ We can also give you the regular response object that if you need something more
 var res = response.getResponseObject();
 ```
 
+## Database Access
+
+Aeolus brings out of the box an easy way to connect to MongoDB.
+
+To give your API a fast access to your DB simply enter the connection url with:
+
+```javascript
+Aeolus.setDB('mongodb://username:password@dburl');
+```
+
+To use the url simply import it with:
+
+```javascript
+var DB = require('aeolus').DB;
+```
+
+### Finding an element
+
+To find a single element in a table just call DB.find. For instance if you're looking for an user with the id: 1234 in your users table. Call it with the proper success and error handlers:
+
+```javascript
+DB.find('users', { id: 1234 }, function (user) {
+  console.log("Success! Found user.");
+  console.log(user);
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Finding all elements
+
+To find all the elements that match your criteria simply call DB.findAll just like you woult with find. But the success handler will be called with an Array of objects. For example if you want all the users with the id greater than 1000
+
+```javascript
+DB.findAll('users', { id: { $gt: 1000 } }, function (users) {
+  console.log("Success! Found "  + users.length + " users.");
+  console.log(users);
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Edit an elements
+
+To edit an element you can call DB.edit with the table, the query, a mapping function that will edit the object and the handlers. For example if you want to increase a counter on how many times a user visits your site:
+
+```javascript
+DB.edit('users', { id: 1234 }, function (user) {
+  user.counter++;
+  return user;
+}, function () {
+  console.log("Success.");
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Map (Edit many)
+
+Just like with DB.edit you can also edit many elements at the same time with DB.map. Using the exact same parameters. For instance if you want to reset all the counters from last example to 0.
+
+```javascript
+DB.map('users', { }, function (user) {
+  user.counter = 0;
+  return user;
+}, function () {
+  console.log("Success.");
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Insert
+
+To insert data to your DB there's a simple method called DB.insert.
+Call it with the table, the object you want to insert and the handlers.
+
+```javascript
+var newUser = {
+  id: 1234,
+  name: "Bob the Llama"
+};
+DB.insert('users', newUser, function (already) {
+  console.log("Success.");
+  if (already) {
+    console.log("Object was already there.");
+  }
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Delete
+
+To delete any objects matching your query call DB.delete.
+If for instance you want to delete all the users with the first name "Bob" for some reason:
+
+```javascript
+DB.delete('users', { firstName: "Bob" }, function () {
+  console.log("Success.");
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+### Reduce
+
+Sometimes you don't need the objects themselves but rather a result using those object.
+For that we have DB.reduce which takes a table, a object for the query, a reducing function as Array.reduce would, the initialValue and your success and error handlers.
+
+For example if you want to count how many visits all the users named "Bob" have made to your site (if you keep track of it, obviously) you could:
+
+```javascript
+DB.map('users', { firstName: "Bob" }, function (result, user) {
+  return result + user.visits;
+}, 0, function (result) {
+  console.log("Success. All the Bobs visited the site: " + result + " times.");
+}, function (err) {
+  console.log("Some error ocurred!");
+  console.error(err);
+});
+```
+
+More more information on the operations you can do in the queries consult the [MongoDB Reference](https://docs.mongodb.org/manual/reference/operator/query/)
+
+### Methods as DB Wrappers
+
+Methods can also be defined as predetermined operations on your Database.
+
+To turn a Method into an operation simply call the function from YourMethod.DBWrapper.operation
+
+This means that instead of writing a handler you write how the request to the database should look.
+
+All the functions will take the regular parameters (e.g. the table and the query object and mapping functions if necessary) expect for the success handler, a function to determine what part of the result will be in the response (just for .find and .findAll) and optionally status and headers.
+
+**Very Important:** The table and the query parameters can either be a function that takes the request object and returns the table of query for that request, or hardcoded variables.
+
+For example if you want a **GET** on user.(id) to return the name of the user with the id. Create the Method like this:
+
+```javascript
+var Method = require('Aeolus').Method;
+
+var User = new Method();
+User.DBWrapper.find('users', function(request) {
+  return {
+    id: request.getParameter('id')
+  };
+}, function (user) {
+  return user.name;
+});
+
+module.exports = User;
+```
+
+That method will take any request for user/(id) and return the name of that user in the Database. If it couldn't find it, it'll fire the error Handler.
+
+So if there's a user:
+
+```javascript
+{
+  id: 1234,
+  name: "Bob The Llama"
+}
+```
+
+A **GET** Request at user/1234 will return the String "Bob the Llama".
+
+
+We hope you have a lot of fun using our framework. For any issues of changes don't hesitate to check out the GitHub Repo and either open an Issue or make the change yourself. :D
+
+Aeolus is an Open Source Project so please feel free to use it however you like.
+
 Built with **♥** by Atomic Llama

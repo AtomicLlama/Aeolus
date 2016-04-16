@@ -1,6 +1,6 @@
 {
   "name": "aeolus",
-  "version": "1.1.25",
+  "version": "1.1.29",
   "description": "AtomicLlama's fast and problem free framework for fast NodeJS Servers.",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
   "homepage": "https://github.com/AtomicLlama/Aeolus#readme",
   "dependencies": {
     "basic-auth": "^1.0.3",
-    "httpdispatcher": "^1.0.0"
+    "httpdispatcher": "^1.0.0",
+    "mongodb": "^2.1.14"
   }
 }

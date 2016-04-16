@@ -11,6 +11,7 @@ var Aeolus = function() {
   };
   this.authHandler = null;
   this.unauthorisedHandler = null;
+  this.DB = null;
   var filename = path.join(process.cwd(), 'package.json');
   var file = fs.readFileSync(filename);
   var data = JSON.parse(file);
@@ -21,6 +22,11 @@ var Aeolus = function() {
     this.methodPath = "/methods";
     this.publicPath = "/www";
   }
+};
+
+Aeolus.prototype.setDB = function (url) {
+  var DB = require('./util/DB.js');
+  this.DB = new DB(url);
 };
 
 Aeolus.prototype.onError = function(f) {
