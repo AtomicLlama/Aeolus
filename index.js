@@ -1,5 +1,6 @@
 var http = require('http');
-var dispatcher = require('httpdispatcher');
+var HttpDispatcher = require('httpdispatcher');
+var dispatcher = new HttpDispatcher();
 var auth = require('basic-auth');
 var fs = require('fs');
 var path = require('path');
