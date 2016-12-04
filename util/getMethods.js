@@ -14,7 +14,11 @@ function resourcesForDir(dir,pathToMethods) {
       require.cache[filename] = undefined;
     }
     var method = require(filename);
-    var name = file.substring(0,file.length-3).replace(".","/");
+    var name = file.substring(0,file.length-3);
+    while (name.indexOf('.') >= 0) {
+        name = name.replace(".","/");
+    }
+    console.log(name);
     method.name = name;
     return method;
   });

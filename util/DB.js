@@ -53,7 +53,7 @@ DB.prototype.edit = function (table, query, map, success, error) {
       }
       db.collection(table).save(map(item));
       db.close();
-      callback(map(item));
+      success(map(item));
     });
   }, error);
 };
