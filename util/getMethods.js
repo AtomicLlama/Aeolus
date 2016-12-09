@@ -18,7 +18,6 @@ function resourcesForDir(dir,pathToMethods) {
     while (name.indexOf('.') >= 0) {
         name = name.replace(".","/");
     }
-    console.log(name);
     method.name = name;
     return method;
   });
